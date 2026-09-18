@@ -1,0 +1,601 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   CSS CUSTOM PROPERTIES / DESIGN TOKENS
+   ========================================================================== */
+:root {
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color-scheme: light;
+
+  /* Light mode defaults */
+  --bg-canvas: #f7f8f8;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --border-color: #e5e7eb;
+  --border-subtle: #f3f4f6;
+
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #9ca3af;
+
+  --brand-teal: #087f7a;
+  --brand-teal-light: #eaf7f5;
+  --brand-orange: #ff5a00;
+  --brand-orange-light: #fff5ef;
+
+  color: var(--text-primary);
+  background: var(--bg-canvas);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   DARK MODE COLOR THEME TOKENS
+   Distinct, vibrant, cyber-aqua & glowing amber aesthetic
+   ========================================================================== */
+html.dark,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-canvas: #090e17;
+  --bg-surface: #111928;
+  --bg-surface-elevated: #172235;
+  --border-color: #24324a;
+  --border-subtle: #192438;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #8192a8;
+
+  --brand-teal: #00e5ff;
+  --brand-teal-light: rgba(0, 229, 255, 0.12);
+  --brand-orange: #ff6a1a;
+  --brand-orange-light: rgba(255, 106, 26, 0.14);
+
+  color: var(--text-primary);
+  background: var(--bg-canvas);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--bg-canvas);
+  color: var(--text-primary);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#root {
+  min-height: 100vh;
+  background: var(--bg-canvas);
+}
+
+/* ==========================================================================
+   SCROLLBAR STYLES
+   ========================================================================== */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f3f3;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #090e17;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5d5;
+  border-radius: 999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #24324a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #087f7a;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #00e5ff;
+}
+
+/* ==========================================================================
+   SELECTION
+   ========================================================================== */
+::selection {
+  background: #087f7a;
+  color: white;
+}
+
+.dark ::selection {
+  background: #00e5ff;
+  color: #090e17;
+}
+
+/* ==========================================================================
+   MOBILE & OVERFLOW DEFAULTS
+   ========================================================================== */
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   GLOBAL DARK MODE COLOR TRANSFORMATION
+   Ensures ALL Customer, Worker, and Admin pages are 100% visible and cohesive
+   ========================================================================== */
+
+/* Outer Canvas Backgrounds */
+.dark body,
+.dark #root,
+.dark .min-h-screen,
+.dark main.min-h-screen,
+.dark div.min-h-screen,
+.dark .bg-\[\#F7F8F8\],
+.dark .bg-\[\#F9FAFB\],
+.dark .bg-\[\#F8FAFA\],
+.dark .bg-\[\#FAFAFA\] {
+  background-color: #090e17 !important;
+  color: #f8fafc !important;
+}
+
+/* Card Surfaces & Modals */
+.dark .bg-white,
+.dark .bg-white\/95,
+.dark .bg-white\/90,
+.dark .bg-white\/85,
+.dark .bg-white\/80,
+.dark .bg-white\/70,
+.dark .bg-white\/60 {
+  background-color: #111928 !important;
+}
+
+/* Inset / Elevated Surfaces (Icon tiles, back buttons, search insets, secondary pills) */
+.dark .bg-gray-50,
+.dark .bg-slate-50,
+.dark .bg-gray-100,
+.dark .bg-slate-100,
+.dark .bg-\[\#F3F4F6\] {
+  background-color: #172235 !important;
+}
+
+/* Interactive Hover States in Dark Mode */
+.dark .hover\:bg-gray-50:hover,
+.dark .hover\:bg-gray-50\/70:hover,
+.dark .hover\:bg-gray-100:hover,
+.dark .hover\:bg-gray-200:hover,
+.dark .hover\:bg-\[\#F3F4F6\]:hover,
+.dark .hover\:bg-teal-50:hover,
+.dark .hover\:bg-teal-50\/50:hover,
+.dark .hover\:bg-orange-50:hover,
+.dark .hover\:bg-orange-50\/50:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark .bg-\[\#E5E7EB\],
+.dark .bg-gray-200,
+.dark .bg-slate-200 {
+  background-color: #24324a !important;
+}
+
+/* Borders & Dividers Across All Customer & Worker Screens */
+.dark .border-\[\#E5E7EB\],
+.dark .border-\[\#F3F4F6\],
+.dark .border-\[\#E2E8F0\],
+.dark .border-gray-100,
+.dark .border-gray-200,
+.dark .border-gray-300,
+.dark .border-slate-100,
+.dark .border-slate-200 {
+  border-color: #24324a !important;
+}
+
+.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-gray-200 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-gray-300 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #24324a !important;
+}
+
+/* ==========================================================================
+   PRESERVE WHITE ELEMENTS ON BRAND/COLORED HEADERS & CARDS
+   (Fixes worker active language pill, avatar box, and welfare button)
+   ========================================================================== */
+.dark .bg-\[\#087F7A\] .bg-white,
+.dark .bg-\[\#FF5A00\] .bg-white,
+.dark [class*="bg-[#087F7A]"] .bg-white,
+.dark [class*="bg-[#FF5A00]"] .bg-white {
+  background-color: #ffffff !important;
+}
+
+.dark .bg-\[\#087F7A\] .text-\[\#087F7A\],
+.dark [class*="bg-[#087F7A]"] .text-\[\#087F7A\] {
+  color: #087f7a !important;
+}
+
+.dark .bg-\[\#FF5A00\] .text-\[\#FF5A00\],
+.dark [class*="bg-[#FF5A00]"] .text-\[\#FF5A00\] {
+  color: #ff5a00 !important;
+}
+
+/* ==========================================================================
+   HEADER THEME TOGGLE (Frosted glass in worker teal headers, clean pill in white headers)
+   ========================================================================== */
+.header-theme-toggle {
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  color: #d97706;
+}
+
+.dark .header-theme-toggle {
+  background-color: #172235;
+  border: 1px solid #24324a;
+  color: #00e5ff;
+}
+
+.bg-\[\#087F7A\] .header-theme-toggle,
+[class*="bg-[#087F7A]"] .header-theme-toggle {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.bg-\[\#087F7A\] .header-theme-toggle svg,
+[class*="bg-[#087F7A]"] .header-theme-toggle svg {
+  color: #ffffff !important;
+}
+
+/* ==========================================================================
+   TEXT VISIBILITY IN DARK MODE (Crisp High-Contrast Typography)
+   ========================================================================== */
+
+/* Primary Headings, Titles & High-contrast Text */
+.dark .text-\[\#111827\],
+.dark .text-\[\#171717\],
+.dark .text-\[\#1F2937\],
+.dark .text-\[\#000000\],
+.dark .text-black,
+.dark .text-gray-900,
+.dark .text-gray-800,
+.dark .text-slate-900,
+.dark .text-slate-800 {
+  color: #f8fafc !important;
+}
+
+/* Secondary Text & Body Labels */
+.dark .text-\[\#374151\],
+.dark .text-\[\#4B5563\],
+.dark .text-gray-700,
+.dark .text-gray-600,
+.dark .text-slate-700,
+.dark .text-slate-600 {
+  color: #cbd5e1 !important;
+}
+
+/* Medium Subtitles & Helper Text */
+.dark .text-\[\#6B7280\],
+.dark .text-gray-500,
+.dark .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+/* Muted Captions, Small Text & Placeholders */
+.dark .text-\[\#9CA3AF\],
+.dark .text-gray-400,
+.dark .text-slate-400,
+.dark input::placeholder,
+.dark textarea::placeholder,
+.dark .placeholder\:text-\[\#9CA3AF\]::placeholder,
+.dark .placeholder\:text-gray-400::placeholder {
+  color: #8192a8 !important;
+}
+
+/* ==========================================================================
+   BRAND ACCENTS: CYBER AQUA & RADIANT AMBER
+   ========================================================================== */
+
+/* Teal Accent in Dark Mode -> Cyber Electric Aqua (#00E5FF / #0891B2) */
+.dark .text-\[\#087F7A\] {
+  color: #00e5ff !important;
+}
+
+.dark .bg-\[\#087F7A\] {
+  background-color: #0891b2 !important;
+  color: #ffffff !important;
+}
+
+.dark .hover\:bg-\[\#087F7A\]:hover {
+  background-color: #06b6d4 !important;
+}
+
+.dark .border-\[\#087F7A\] {
+  border-color: #00e5ff !important;
+}
+
+.dark .ring-\[\#087F7A\] {
+  --tw-ring-color: #00e5ff !important;
+}
+
+.dark .bg-\[\#EAF7F5\],
+.dark .bg-\[\#E6F7F5\],
+.dark .bg-\[\#E9F7F6\],
+.dark .bg-teal-50,
+.dark .bg-teal-50\/70,
+.dark .bg-teal-50\/50 {
+  background-color: rgba(0, 229, 255, 0.12) !important;
+}
+
+.dark .border-\[\#D5EFEB\],
+.dark .border-\[\#C6EBE6\],
+.dark .border-teal-200 {
+  border-color: rgba(0, 229, 255, 0.28) !important;
+}
+
+/* Orange Accent in Dark Mode -> Radiant Amber Flame (#FF6A1A / #FF7A29) */
+.dark .text-\[\#FF5A00\] {
+  color: #ff7a29 !important;
+}
+
+.dark .bg-\[\#FF5A00\] {
+  background-color: #ff6a1a !important;
+  color: #ffffff !important;
+}
+
+.dark .hover\:bg-\[\#FF5A00\]:hover,
+.dark .hover\:bg-\[\#e04f00\]:hover,
+.dark .hover\:bg-\[\#e65100\]:hover,
+.dark .hover\:bg-\[\#e95000\]:hover {
+  background-color: #ea580c !important;
+}
+
+.dark .border-\[\#FF5A00\] {
+  border-color: #ff7a29 !important;
+}
+
+.dark .bg-\[\#FFF5EF\],
+.dark .bg-\[\#FFF1E8\],
+.dark .bg-\[\#FFF4EC\],
+.dark .bg-\[\#FFF2E8\],
+.dark .bg-\[\#FFF7F2\],
+.dark .bg-\[\#FFF7E6\],
+.dark .bg-orange-50 {
+  background-color: rgba(255, 106, 26, 0.14) !important;
+}
+
+.dark .border-\[\#FFE2D1\],
+.dark .border-orange-100,
+.dark .border-orange-100\/50,
+.dark .border-orange-200 {
+  border-color: rgba(255, 106, 26, 0.28) !important;
+}
+
+/* Purple Accent */
+.dark .text-purple-600,
+.dark .text-purple-500 {
+  color: #c084fc !important;
+}
+.dark .bg-purple-50,
+.dark .bg-purple-100 {
+  background-color: rgba(168, 85, 247, 0.15) !important;
+}
+
+/* ==========================================================================
+   GRADIENT TRANSFORMATION IN DARK MODE
+   Smoothly shifts pale peach-to-white cards into rich cyber-dark cards
+   ========================================================================== */
+.dark .from-\[\#FFF4EC\],
+.dark .from-\[\#FFF2E8\],
+.dark .from-\[\#FFF7F2\],
+.dark .from-\[\#FFF1E8\],
+.dark .from-\[\#FFF5EF\] {
+  --tw-gradient-from: #172235 var(--tw-gradient-from-position, ) !important;
+  --tw-gradient-to: rgba(23, 34, 53, 0) var(--tw-gradient-to-position, ) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+.dark .to-white,
+.dark .to-\[\#FFFFFF\] {
+  --tw-gradient-to: #111928 var(--tw-gradient-to-position, ) !important;
+}
+
+/* ==========================================================================
+   STATUS BADGES & ALERT COLORS (High Contrast in Dark Mode)
+   ========================================================================== */
+
+/* Green / Success */
+.dark .bg-green-50,
+.dark .bg-green-100 {
+  background-color: rgba(34, 197, 94, 0.15) !important;
+}
+.dark .text-green-600,
+.dark .text-green-700,
+.dark .text-green-800 {
+  color: #4ade80 !important;
+}
+
+/* Red / Error */
+.dark .bg-red-50,
+.dark .bg-red-100 {
+  background-color: rgba(239, 68, 68, 0.15) !important;
+}
+.dark .text-red-500,
+.dark .text-red-600,
+.dark .text-red-700 {
+  color: #f87171 !important;
+}
+
+/* Blue / Info */
+.dark .bg-blue-50,
+.dark .bg-blue-100 {
+  background-color: rgba(59, 130, 246, 0.15) !important;
+}
+.dark .text-blue-600,
+.dark .text-blue-700 {
+  color: #60a5fa !important;
+}
+
+/* Yellow / Amber / Warning */
+.dark .bg-yellow-50,
+.dark .bg-yellow-100,
+.dark .bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+}
+.dark .text-yellow-500,
+.dark .text-yellow-600,
+.dark .text-yellow-700,
+.dark .text-yellow-800,
+.dark .text-amber-600,
+.dark .text-amber-700 {
+  color: #fbbf24 !important;
+}
+
+/* ==========================================================================
+   FORM CONTROLS & TRANSPARENT INPUTS
+   ========================================================================== */
+.dark input:not(.bg-transparent),
+.dark textarea:not(.bg-transparent),
+.dark select {
+  background-color: #0d1422 !important;
+  color: #f8fafc !important;
+  border-color: #24324a !important;
+}
+
+.dark input.bg-transparent,
+.dark textarea.bg-transparent {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  border-color: #00e5ff !important;
+  box-shadow: 0 0 0 1px #00e5ff !important;
+}
+
+/* Disabled buttons and fields */
+.dark button:disabled,
+.dark .disabled\:bg-gray-300:disabled,
+.dark .disabled\:text-gray-300:disabled {
+  background-color: #1e293b !important;
+  color: #64748b !important;
+  border-color: #334155 !important;
+}
+
+/* ==========================================================================
+   SWITCH & TOGGLE KNOB PROTECTION (Always stay pure white)
+   ========================================================================== */
+.dark button[role="switch"] span,
+.dark button[aria-checked] span,
+.dark button[aria-label*="Toggle" i] span,
+.dark button[aria-label*="toggle" i] div,
+.dark button.rounded-full span.bg-white,
+.dark button.rounded-full div.bg-white,
+.dark button.h-6.w-11 span.bg-white,
+.dark button.w-11.h-6 div.bg-white,
+.dark button.w-11.h-6 span.bg-white,
+.dark .toggle-knob,
+.dark .switch-knob,
+.dark .transition-transform.bg-white,
+.dark span.w-4.h-4.bg-white,
+.dark div.w-4.h-4.bg-white,
+.dark span.h-4.w-4.bg-white,
+.dark div.h-4.w-4.bg-white,
+.dark span.w-5.h-5.bg-white,
+.dark div.w-5.h-5.bg-white,
+.dark .translate-x-5.bg-white,
+.dark .translate-x-0.bg-white,
+.dark .translate-x-7.bg-white,
+.dark .translate-x-8.bg-white,
+.dark .translate-x-1.bg-white {
+  background-color: #ffffff !important;
+}
+
+/* ==========================================================================
+   TARGETED HEADERS, FOOTERS & BOTTOM NAVIGATION BARS
+   Preserves brand headers (like admin teal headers) while transforming white navs
+   ========================================================================= */
+.dark header.bg-white,
+.dark header.bg-white\/95,
+.dark header.bg-white\/90,
+.dark nav.bg-white,
+.dark nav.bg-white\/95,
+.dark nav.bg-white\/90,
+.dark nav.border-t,
+.dark .bottom-navigation,
+.dark .sticky.top-0.bg-white,
+.dark .sticky.top-0.bg-white\/95,
+.dark .fixed.bottom-0 {
+  background-color: rgba(17, 25, 40, 0.96) !important;
+  border-color: #24324a !important;
+  backdrop-filter: blur(14px);
+}
+
+/* ==========================================================================
+   SHADOWS IN DARK MODE
+   ========================================================================== */
+.dark .shadow-sm {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark .shadow-md,
+.dark .shadow-lg {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dark .shadow-orange-100,
+.dark .shadow-orange-200 {
+  box-shadow: 0 10px 25px rgba(255, 106, 26, 0.25) !important;
+}
