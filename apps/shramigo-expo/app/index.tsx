@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '@/lib/appConstants';
 import { getStoredUser } from '@/features/auth/services';
+import { BrandLogo } from '@/components/BrandLogo';
 
 export default function SplashScreen() {
   const router = useRouter();
@@ -44,9 +45,7 @@ export default function SplashScreen() {
       <Animated.View style={[styles.content, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }]}>
         {/* Logo */}
         <View style={styles.logoContainer}>
-          <View style={styles.logo}>
-            <Text style={styles.logoText}>S</Text>
-          </View>
+          <BrandLogo size="lg" />
         </View>
 
         <Text style={styles.title}>ShramiGo</Text>
@@ -66,7 +65,7 @@ export default function SplashScreen() {
       <View style={styles.bottomSection}>
         <View style={styles.featureGrid}>
           <FeatureItem icon="search" label="Find Services" color={COLORS.accent} bg="#FFF1E8" />
-          <FeatureItem icon="handshake" label="Find Work" color={COLORS.primary} bg={COLORS.primaryLight} />
+          <FeatureItem icon="briefcase" label="Find Work" color={COLORS.primary} bg={COLORS.primaryLight} />
           <FeatureItem icon="shield-checkmark" label="Trusted" color="#16A34A" bg="#F0FDF4" />
         </View>
         <Text style={styles.bottomTagline}>Empowering communities through local services</Text>

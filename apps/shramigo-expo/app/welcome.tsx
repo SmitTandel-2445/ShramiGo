@@ -18,7 +18,7 @@ export default function WelcomeScreen() {
           <View style={styles.circleBottomLeft} />
           <View style={styles.heroContent}>
             <View style={styles.logoRow}>
-              <BrandLogo size="sm" />
+              <BrandLogo size="md" />
             </View>
             <Text style={styles.welcomeLabel}>Welcome to</Text>
             <Text style={styles.title}>ShramiGo</Text>

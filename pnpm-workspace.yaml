@@ -1,3 +1,6 @@
 packages:
   - 'apps/*'
   - 'packages/*'
+minimumReleaseAgeExclude:
+  - react-native-reanimated@4.7.0
+  - react-native-worklets@0.13.0
