@@ -10,7 +10,12 @@ import {
   X,
   Loader2,
 } from "lucide-react";
-import { getAdminUsers, toggleUserActive, type AdminUser } from '@/features/admin/services';
+import { HeaderThemeToggle } from "@/components/common/ThemeToggle";
+import {
+  getAdminUsers,
+  toggleUserActive,
+  type AdminUser,
+} from "@/features/admin/services";
 
 type UserRole = "Customer" | "Worker";
 
@@ -58,11 +63,13 @@ export default function Users() {
                 month: "short",
                 year: "numeric",
               }),
-            }))
+            })),
           );
         }
       } catch (err) {
-        setLoadError(err instanceof Error ? err.message : "Unable to load users.");
+        setLoadError(
+          err instanceof Error ? err.message : "Unable to load users.",
+        );
       } finally {
         setLoading(false);
       }
@@ -81,18 +88,23 @@ export default function Users() {
         prev.map((u) =>
           u.id === user.id
             ? { ...u, status: u.status === "Active" ? "Suspended" : "Active" }
-            : u
-        )
+            : u,
+        ),
       );
       if (selectedUser?.id === user.id) {
         setSelectedUser((prev) =>
           prev
-            ? { ...prev, status: prev.status === "Active" ? "Suspended" : "Active" }
-            : null
+            ? {
+                ...prev,
+                status: prev.status === "Active" ? "Suspended" : "Active",
+              }
+            : null,
         );
       }
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : "Failed to toggle status");
+      setActionError(
+        err instanceof Error ? err.message : "Failed to toggle status",
+      );
     } finally {
       setToggling(false);
     }
@@ -100,8 +112,7 @@ export default function Users() {
 
   const filteredUsers = useMemo(() => {
     return userList.filter((user) => {
-      const matchesFilter =
-        filter === "All" || user.role === filter;
+      const matchesFilter = filter === "All" || user.role === filter;
 
       const query = search.toLowerCase();
 
@@ -116,12 +127,10 @@ export default function Users() {
 
   return (
     <div className="min-h-screen bg-[#F7F8F8] text-gray-900">
-
       {/* Header */}
       <header className="sticky top-0 z-40 bg-[#087F7A] text-white shadow-md">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-5">
-
-          <div className="flex items-center gap-4">
+        <div className="mx-auto max-w-7xl px-5 py-4 sm:px-8 sm:py-5">
+          <div className="flex items-center justify-between gap-4">
             <button
               onClick={() => navigate("/admin")}
               className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/20"
@@ -130,21 +139,16 @@ export default function Users() {
             </button>
 
             <div>
-              <p className="text-xs text-white/70">
-                Administration
-              </p>
+              <p className="text-xs text-white/70">Administration</p>
 
-              <h1 className="text-xl font-bold">
-                User Management
-              </h1>
+              <h1 className="text-xl font-bold">User Management</h1>
             </div>
+            <HeaderThemeToggle />
           </div>
-
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-5 sm:px-8 py-7">
-
         {(loadError || actionError) && (
           <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
             {loadError || actionError}
@@ -152,36 +156,23 @@ export default function Users() {
         )}
 
         {/* Summary */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-7">
-
+        <div className="mb-7 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <div className="bg-white rounded-2xl border border-gray-100 p-5">
             <div className="w-10 h-10 rounded-xl bg-[#087F7A]/10 flex items-center justify-center">
-              <UsersIcon
-                size={20}
-                className="text-[#087F7A]"
-              />
+              <UsersIcon size={20} className="text-[#087F7A]" />
             </div>
 
-            <p className="text-xs text-gray-500 mt-4">
-              Total Users
-            </p>
+            <p className="text-xs text-gray-500 mt-4">Total Users</p>
 
-            <p className="text-2xl font-bold mt-1">
-              {userList.length}
-            </p>
+            <p className="text-2xl font-bold mt-1">{userList.length}</p>
           </div>
 
           <div className="bg-white rounded-2xl border border-gray-100 p-5">
             <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center">
-              <UserRound
-                size={20}
-                className="text-[#FF5A00]"
-              />
+              <UserRound size={20} className="text-[#FF5A00]" />
             </div>
 
-            <p className="text-xs text-gray-500 mt-4">
-              Customers
-            </p>
+            <p className="text-xs text-gray-500 mt-4">Customers</p>
 
             <p className="text-2xl font-bold mt-1">
               {userList.filter((user) => user.role === "Customer").length}
@@ -190,28 +181,20 @@ export default function Users() {
 
           <div className="bg-white rounded-2xl border border-gray-100 p-5">
             <div className="w-10 h-10 rounded-xl bg-[#087F7A]/10 flex items-center justify-center">
-              <BriefcaseBusiness
-                size={20}
-                className="text-[#087F7A]"
-              />
+              <BriefcaseBusiness size={20} className="text-[#087F7A]" />
             </div>
 
-            <p className="text-xs text-gray-500 mt-4">
-              Workers
-            </p>
+            <p className="text-xs text-gray-500 mt-4">Workers</p>
 
             <p className="text-2xl font-bold mt-1">
               {userList.filter((user) => user.role === "Worker").length}
             </p>
           </div>
-
         </div>
 
         {/* Search & Filter */}
         <div className="bg-white rounded-2xl border border-gray-100 p-4 mb-5">
-
-          <div className="flex flex-col lg:flex-row gap-4">
-
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
             <div className="relative flex-1">
               <Search
                 size={19}
@@ -226,52 +209,40 @@ export default function Users() {
               />
             </div>
 
-            <div className="flex gap-2">
-
-              {(["All", "Customer", "Worker"] as const).map(
-                (item) => (
-                  <button
-                    key={item}
-                    onClick={() => setFilter(item)}
-                    className={`px-4 py-2.5 rounded-xl text-sm font-medium transition ${
-                      filter === item
-                        ? "bg-[#087F7A] text-white"
-                        : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-                    }`}
-                  >
-                    {item}
-                  </button>
-                )
-              )}
-
+            <div className="flex flex-wrap gap-2">
+              {(["All", "Customer", "Worker"] as const).map((item) => (
+                <button
+                  key={item}
+                  onClick={() => setFilter(item)}
+                  className={`px-4 py-2.5 rounded-xl text-sm font-medium transition ${
+                    filter === item
+                      ? "bg-[#087F7A] text-white"
+                      : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
             </div>
           </div>
-
         </div>
 
         {/* User List */}
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-
           <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
             <div>
-              <h2 className="font-bold">
-                Registered Users
-              </h2>
+              <h2 className="font-bold">Registered Users</h2>
 
               <p className="text-xs text-gray-500 mt-1">
                 {filteredUsers.length} users displayed
               </p>
             </div>
 
-            <ShieldCheck
-              size={20}
-              className="text-[#087F7A]"
-            />
+            <ShieldCheck size={20} className="text-[#087F7A]" />
           </div>
 
           {/* Desktop table */}
           <div className="hidden md:block overflow-x-auto">
-
             <table className="w-full">
               <thead>
                 <tr className="bg-gray-50 text-left">
@@ -307,10 +278,8 @@ export default function Users() {
                     key={user.id}
                     className="border-t border-gray-100 hover:bg-gray-50/70"
                   >
-
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
-
                         <div className="w-10 h-10 rounded-full bg-[#087F7A]/10 flex items-center justify-center">
                           {user.role === "Worker" ? (
                             <BriefcaseBusiness
@@ -318,23 +287,15 @@ export default function Users() {
                               className="text-[#087F7A]"
                             />
                           ) : (
-                            <UserRound
-                              size={18}
-                              className="text-[#FF5A00]"
-                            />
+                            <UserRound size={18} className="text-[#FF5A00]" />
                           )}
                         </div>
 
                         <div>
-                          <p className="font-semibold text-sm">
-                            {user.name}
-                          </p>
+                          <p className="font-semibold text-sm">{user.name}</p>
 
-                          <p className="text-xs text-gray-400">
-                            {user.id}
-                          </p>
+                          <p className="text-xs text-gray-400">{user.id}</p>
                         </div>
-
                       </div>
                     </td>
 
@@ -351,13 +312,9 @@ export default function Users() {
                     </td>
 
                     <td className="px-5 py-4">
-                      <p className="text-sm">
-                        {user.email}
-                      </p>
+                      <p className="text-sm">{user.email}</p>
 
-                      <p className="text-xs text-gray-400 mt-1">
-                        {user.phone}
-                      </p>
+                      <p className="text-xs text-gray-400 mt-1">{user.phone}</p>
                     </td>
 
                     <td className="px-5 py-4">
@@ -384,27 +341,18 @@ export default function Users() {
                         View
                       </button>
                     </td>
-
                   </tr>
                 ))}
               </tbody>
             </table>
-
           </div>
 
           {/* Mobile cards */}
           <div className="md:hidden divide-y divide-gray-100">
-
             {filteredUsers.map((user) => (
-              <div
-                key={user.id}
-                className="p-5"
-              >
-
+              <div key={user.id} className="p-5">
                 <div className="flex items-center justify-between">
-
                   <div className="flex items-center gap-3">
-
                     <div className="w-11 h-11 rounded-full bg-[#087F7A]/10 flex items-center justify-center">
                       {user.role === "Worker" ? (
                         <BriefcaseBusiness
@@ -412,23 +360,15 @@ export default function Users() {
                           className="text-[#087F7A]"
                         />
                       ) : (
-                        <UserRound
-                          size={19}
-                          className="text-[#FF5A00]"
-                        />
+                        <UserRound size={19} className="text-[#FF5A00]" />
                       )}
                     </div>
 
                     <div>
-                      <p className="font-semibold text-sm">
-                        {user.name}
-                      </p>
+                      <p className="font-semibold text-sm">{user.name}</p>
 
-                      <p className="text-xs text-gray-400">
-                        {user.id}
-                      </p>
+                      <p className="text-xs text-gray-400">{user.id}</p>
                     </div>
-
                   </div>
 
                   <span
@@ -440,38 +380,23 @@ export default function Users() {
                   >
                     {user.status}
                   </span>
-
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
-
                   <div>
-                    <p className="text-gray-400">
-                      Role
-                    </p>
-                    <p className="font-medium mt-1">
-                      {user.role}
-                    </p>
+                    <p className="text-gray-400">Role</p>
+                    <p className="font-medium mt-1">{user.role}</p>
                   </div>
 
                   <div>
-                    <p className="text-gray-400">
-                      Joined
-                    </p>
-                    <p className="font-medium mt-1">
-                      {user.joined}
-                    </p>
+                    <p className="text-gray-400">Joined</p>
+                    <p className="font-medium mt-1">{user.joined}</p>
                   </div>
 
                   <div className="col-span-2">
-                    <p className="text-gray-400">
-                      Email
-                    </p>
-                    <p className="font-medium mt-1">
-                      {user.email}
-                    </p>
+                    <p className="text-gray-400">Email</p>
+                    <p className="font-medium mt-1">{user.email}</p>
                   </div>
-
                 </div>
 
                 <button
@@ -480,44 +405,30 @@ export default function Users() {
                 >
                   View User
                 </button>
-
               </div>
             ))}
-
           </div>
 
           {filteredUsers.length === 0 && (
             <div className="py-14 text-center">
-              <Search
-                size={28}
-                className="mx-auto text-gray-300"
-              />
+              <Search size={28} className="mx-auto text-gray-300" />
 
-              <p className="font-medium mt-3">
-                No users found
-              </p>
+              <p className="font-medium mt-3">No users found</p>
 
               <p className="text-sm text-gray-400 mt-1">
                 Try changing your search or filter.
               </p>
             </div>
           )}
-
         </div>
-
       </main>
 
       {/* User Details Modal */}
       {selectedUser && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center px-4 z-50">
-
           <div className="w-full max-w-md bg-white rounded-3xl p-6 shadow-xl">
-
             <div className="flex items-center justify-between">
-
-              <h2 className="text-lg font-bold">
-                User Details
-              </h2>
+              <h2 className="text-lg font-bold">User Details</h2>
 
               <button
                 onClick={() => setSelectedUser(null)}
@@ -525,79 +436,50 @@ export default function Users() {
               >
                 <X size={18} />
               </button>
-
             </div>
 
             <div className="flex items-center gap-4 mt-6">
-
               <div className="w-14 h-14 rounded-full bg-[#087F7A]/10 flex items-center justify-center">
                 {selectedUser.role === "Worker" ? (
-                  <BriefcaseBusiness
-                    size={24}
-                    className="text-[#087F7A]"
-                  />
+                  <BriefcaseBusiness size={24} className="text-[#087F7A]" />
                 ) : (
-                  <UserRound
-                    size={24}
-                    className="text-[#FF5A00]"
-                  />
+                  <UserRound size={24} className="text-[#FF5A00]" />
                 )}
               </div>
 
               <div>
-                <h3 className="font-bold">
-                  {selectedUser.name}
-                </h3>
+                <h3 className="font-bold">{selectedUser.name}</h3>
 
-                <p className="text-xs text-gray-500 mt-1">
-                  {selectedUser.id}
-                </p>
+                <p className="text-xs text-gray-500 mt-1">{selectedUser.id}</p>
               </div>
-
             </div>
 
             <div className="mt-6 space-y-4">
-
               <div>
-                <p className="text-xs text-gray-400">
-                  Email
-                </p>
-                <p className="text-sm font-medium mt-1">
-                  {selectedUser.email}
-                </p>
+                <p className="text-xs text-gray-400">Email</p>
+                <p className="text-sm font-medium mt-1">{selectedUser.email}</p>
               </div>
 
               <div>
-                <p className="text-xs text-gray-400">
-                  Phone
-                </p>
-                <p className="text-sm font-medium mt-1">
-                  {selectedUser.phone}
-                </p>
+                <p className="text-xs text-gray-400">Phone</p>
+                <p className="text-sm font-medium mt-1">{selectedUser.phone}</p>
               </div>
 
               <div className="flex gap-3">
-
                 <div className="flex-1">
-                  <p className="text-xs text-gray-400">
-                    Role
-                  </p>
+                  <p className="text-xs text-gray-400">Role</p>
                   <p className="text-sm font-medium mt-1">
                     {selectedUser.role}
                   </p>
                 </div>
 
                 <div className="flex-1">
-                  <p className="text-xs text-gray-400">
-                    Status
-                  </p>
+                  <p className="text-xs text-gray-400">Status</p>
                   <p className="text-sm font-medium mt-1">
                     {selectedUser.status}
                   </p>
                 </div>
-
               </div>
-
             </div>
 
             <div className="mt-7 flex gap-3">
@@ -613,8 +495,8 @@ export default function Users() {
                 {toggling
                   ? "Updating..."
                   : selectedUser.status === "Active"
-                  ? "Suspend Account"
-                  : "Activate Account"}
+                    ? "Suspend Account"
+                    : "Activate Account"}
               </button>
 
               <button
@@ -624,12 +506,9 @@ export default function Users() {
                 Close
               </button>
             </div>
-
           </div>
-
         </div>
       )}
-
     </div>
   );
 }

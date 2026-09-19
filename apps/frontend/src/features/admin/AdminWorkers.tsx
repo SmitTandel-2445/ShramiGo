@@ -15,7 +15,8 @@ import {
   X,
   XCircle,
 } from "lucide-react";
-import { getAdminWorkers } from '@/features/admin/services';
+import { HeaderThemeToggle } from "@/components/common/ThemeToggle";
+import { getAdminWorkers } from "@/features/admin/services";
 
 type WorkerStatus = "Verified" | "Pending" | "Suspended";
 
@@ -36,11 +37,8 @@ export default function Workers() {
   const navigate = useNavigate();
 
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<
-    "All" | WorkerStatus
-  >("All");
-  const [selectedWorker, setSelectedWorker] =
-    useState<Worker | null>(null);
+  const [filter, setFilter] = useState<"All" | WorkerStatus>("All");
+  const [selectedWorker, setSelectedWorker] = useState<Worker | null>(null);
   const [workerList, setWorkerList] = useState<Worker[]>(workers);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
@@ -52,23 +50,27 @@ export default function Workers() {
         setLoadError("");
         const data = await getAdminWorkers(0, 100);
         setWorkerList(
-            data.map((w: any) => ({
-              id: `WRK${String(w.id).padStart(3, "0")}`,
-              name: w.full_name,
-              service: "Service Professional",
-              location: [w.city, w.state].filter(Boolean).join(", ") || "Location not provided",
-              experience: `${w.experience_years} years`,
-              rating: 0,
-              reviews: w.booking_count,
-              status: w.is_verified
-                ? "Verified"
-                : !w.is_active
+          data.map((w: any) => ({
+            id: `WRK${String(w.id).padStart(3, "0")}`,
+            name: w.full_name,
+            service: "Service Professional",
+            location:
+              [w.city, w.state].filter(Boolean).join(", ") ||
+              "Location not provided",
+            experience: `${w.experience_years} years`,
+            rating: 0,
+            reviews: w.booking_count,
+            status: w.is_verified
+              ? "Verified"
+              : !w.is_active
                 ? "Suspended"
                 : "Pending",
-            }))
+          })),
         );
       } catch (err) {
-        setLoadError(err instanceof Error ? err.message : "Unable to load workers.");
+        setLoadError(
+          err instanceof Error ? err.message : "Unable to load workers.",
+        );
       } finally {
         setLoading(false);
       }
@@ -78,8 +80,7 @@ export default function Workers() {
 
   const filteredWorkers = useMemo(() => {
     return workerList.filter((worker) => {
-      const matchesFilter =
-        filter === "All" || worker.status === filter;
+      const matchesFilter = filter === "All" || worker.status === filter;
 
       const query = search.toLowerCase();
 
@@ -95,12 +96,10 @@ export default function Workers() {
 
   return (
     <div className="min-h-screen bg-[#F7F8F8] text-gray-900">
-
       {/* Header */}
       <header className="sticky top-0 z-40 bg-[#087F7A] text-white shadow-md">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-5">
-
-          <div className="flex items-center gap-4">
+        <div className="mx-auto max-w-7xl px-5 py-4 sm:px-8 sm:py-5">
+          <div className="flex items-center justify-between gap-4">
             <button
               onClick={() => navigate("/admin")}
               className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/20"
@@ -109,101 +108,78 @@ export default function Workers() {
             </button>
 
             <div>
-              <p className="text-xs text-white/70">
-                Administration
-              </p>
+              <p className="text-xs text-white/70">Administration</p>
 
-              <h1 className="text-xl font-bold">
-                Worker Management
-              </h1>
+              <h1 className="text-xl font-bold">Worker Management</h1>
             </div>
+            <HeaderThemeToggle />
           </div>
-
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-5 sm:px-8 py-7">
-
-        {loadError && <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">Unable to load workers: {loadError}</div>}
+        {loadError && (
+          <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            Unable to load workers: {loadError}
+          </div>
+        )}
 
         {/* Summary */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
-
+        <div className="mb-7 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="bg-white rounded-2xl border border-gray-100 p-5">
             <div className="w-10 h-10 rounded-xl bg-[#087F7A]/10 flex items-center justify-center">
-              <BriefcaseBusiness
-                size={20}
-                className="text-[#087F7A]"
-              />
+              <BriefcaseBusiness size={20} className="text-[#087F7A]" />
             </div>
 
-            <p className="text-xs text-gray-500 mt-4">
-              Total Workers
-            </p>
+            <p className="text-xs text-gray-500 mt-4">Total Workers</p>
 
-            <p className="text-2xl font-bold mt-1">
-              {workerList.length}
-            </p>
+            <p className="text-2xl font-bold mt-1">{workerList.length}</p>
           </div>
 
           <div className="bg-white rounded-2xl border border-gray-100 p-5">
             <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
-              <CheckCircle2
-                size={20}
-                className="text-green-600"
-              />
+              <CheckCircle2 size={20} className="text-green-600" />
             </div>
 
-            <p className="text-xs text-gray-500 mt-4">
-              Verified
-            </p>
+            <p className="text-xs text-gray-500 mt-4">Verified</p>
 
             <p className="text-2xl font-bold mt-1">
-              {workerList.filter((worker) => worker.status === "Verified").length}
+              {
+                workerList.filter((worker) => worker.status === "Verified")
+                  .length
+              }
             </p>
           </div>
 
           <div className="bg-white rounded-2xl border border-gray-100 p-5">
             <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center">
-              <Filter
-                size={20}
-                className="text-[#FF5A00]"
-              />
+              <Filter size={20} className="text-[#FF5A00]" />
             </div>
 
-            <p className="text-xs text-gray-500 mt-4">
-              Pending Verification
-            </p>
+            <p className="text-xs text-gray-500 mt-4">Pending Verification</p>
 
             <p className="text-2xl font-bold mt-1">
-              {workerList.filter((worker) => worker.status === "Pending").length}
+              {
+                workerList.filter((worker) => worker.status === "Pending")
+                  .length
+              }
             </p>
           </div>
 
           <div className="bg-white rounded-2xl border border-gray-100 p-5">
             <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center">
-              <XCircle
-                size={20}
-                className="text-red-600"
-              />
+              <XCircle size={20} className="text-red-600" />
             </div>
 
-            <p className="text-xs text-gray-500 mt-4">
-              Suspended
-            </p>
+            <p className="text-xs text-gray-500 mt-4">Suspended</p>
 
-            <p className="text-2xl font-bold mt-1">
-              16
-            </p>
+            <p className="text-2xl font-bold mt-1">16</p>
           </div>
-
         </div>
 
         {/* Search / Filters */}
         <div className="bg-white rounded-2xl border border-gray-100 p-4 mb-5">
-
-          <div className="flex flex-col lg:flex-row gap-4">
-
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
             <div className="relative flex-1">
               <Search
                 size={19}
@@ -219,57 +195,44 @@ export default function Workers() {
             </div>
 
             <div className="flex gap-2 flex-wrap">
-              {(
-                ["All", "Verified", "Pending", "Suspended"] as const
-              ).map((item) => (
-                <button
-                  key={item}
-                  onClick={() => setFilter(item)}
-                  className={`px-4 py-2.5 rounded-xl text-sm font-medium transition ${
-                    filter === item
-                      ? "bg-[#087F7A] text-white"
-                      : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-                  }`}
-                >
-                  {item}
-                </button>
-              ))}
+              {(["All", "Verified", "Pending", "Suspended"] as const).map(
+                (item) => (
+                  <button
+                    key={item}
+                    onClick={() => setFilter(item)}
+                    className={`px-4 py-2.5 rounded-xl text-sm font-medium transition ${
+                      filter === item
+                        ? "bg-[#087F7A] text-white"
+                        : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ),
+              )}
             </div>
-
           </div>
-
         </div>
 
         {/* Worker List */}
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-
           <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-
             <div>
-              <h2 className="font-bold">
-                Registered Workers
-              </h2>
+              <h2 className="font-bold">Registered Workers</h2>
 
               <p className="text-xs text-gray-500 mt-1">
                 {filteredWorkers.length} workers displayed
               </p>
             </div>
 
-            <ShieldCheck
-              size={20}
-              className="text-[#087F7A]"
-            />
-
+            <ShieldCheck size={20} className="text-[#087F7A]" />
           </div>
 
           {/* Desktop */}
           <div className="hidden md:block overflow-x-auto">
-
             <table className="w-full">
-
               <thead>
                 <tr className="bg-gray-50 text-left">
-
                   <th className="px-5 py-3 text-xs font-semibold text-gray-500">
                     Worker
                   </th>
@@ -293,47 +256,31 @@ export default function Workers() {
                   <th className="px-5 py-3 text-xs font-semibold text-gray-500">
                     Action
                   </th>
-
                 </tr>
               </thead>
 
               <tbody>
-
                 {filteredWorkers.map((worker) => (
                   <tr
                     key={worker.id}
                     className="border-t border-gray-100 hover:bg-gray-50/70"
                   >
-
                     <td className="px-5 py-4">
-
                       <div className="flex items-center gap-3">
-
                         <div className="w-10 h-10 rounded-full bg-[#087F7A]/10 flex items-center justify-center">
-                          <UserRound
-                            size={18}
-                            className="text-[#087F7A]"
-                          />
+                          <UserRound size={18} className="text-[#087F7A]" />
                         </div>
 
                         <div>
-                          <p className="font-semibold text-sm">
-                            {worker.name}
-                          </p>
+                          <p className="font-semibold text-sm">{worker.name}</p>
 
-                          <p className="text-xs text-gray-400">
-                            {worker.id}
-                          </p>
+                          <p className="text-xs text-gray-400">{worker.id}</p>
                         </div>
-
                       </div>
-
                     </td>
 
                     <td className="px-5 py-4">
-                      <p className="text-sm font-medium">
-                        {worker.service}
-                      </p>
+                      <p className="text-sm font-medium">{worker.service}</p>
 
                       <p className="text-xs text-gray-400 mt-1">
                         {worker.experience}
@@ -341,16 +288,13 @@ export default function Workers() {
                     </td>
 
                     <td className="px-5 py-4">
-
                       <div className="flex items-center gap-1.5 text-sm text-gray-600">
                         <MapPin size={15} />
                         {worker.location}
                       </div>
-
                     </td>
 
                     <td className="px-5 py-4">
-
                       <div className="flex items-center gap-1">
                         <Star
                           size={15}
@@ -365,7 +309,6 @@ export default function Workers() {
                           ({worker.reviews})
                         </span>
                       </div>
-
                     </td>
 
                     <td className="px-5 py-4">
@@ -373,80 +316,49 @@ export default function Workers() {
                     </td>
 
                     <td className="px-5 py-4">
-
                       <button
-                        onClick={() =>
-                          setSelectedWorker(worker)
-                        }
+                        onClick={() => setSelectedWorker(worker)}
                         className="flex items-center gap-1.5 text-sm font-medium text-[#087F7A] hover:underline"
                       >
                         <Eye size={16} />
                         Review
                       </button>
-
                     </td>
-
                   </tr>
                 ))}
-
               </tbody>
-
             </table>
-
           </div>
 
           {/* Mobile */}
           <div className="md:hidden divide-y divide-gray-100">
-
             {filteredWorkers.map((worker) => (
-              <div
-                key={worker.id}
-                className="p-5"
-              >
-
+              <div key={worker.id} className="p-5">
                 <div className="flex items-start justify-between">
-
                   <div className="flex items-center gap-3">
-
                     <div className="w-11 h-11 rounded-full bg-[#087F7A]/10 flex items-center justify-center">
-                      <UserRound
-                        size={19}
-                        className="text-[#087F7A]"
-                      />
+                      <UserRound size={19} className="text-[#087F7A]" />
                     </div>
 
                     <div>
-                      <p className="font-semibold text-sm">
-                        {worker.name}
-                      </p>
+                      <p className="font-semibold text-sm">{worker.name}</p>
 
-                      <p className="text-xs text-gray-400">
-                        {worker.id}
-                      </p>
+                      <p className="text-xs text-gray-400">{worker.id}</p>
                     </div>
-
                   </div>
 
                   <StatusBadge status={worker.status} />
-
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-4">
-
                   <div>
-                    <p className="text-xs text-gray-400">
-                      Service
-                    </p>
+                    <p className="text-xs text-gray-400">Service</p>
 
-                    <p className="text-sm font-medium mt-1">
-                      {worker.service}
-                    </p>
+                    <p className="text-sm font-medium mt-1">{worker.service}</p>
                   </div>
 
                   <div>
-                    <p className="text-xs text-gray-400">
-                      Experience
-                    </p>
+                    <p className="text-xs text-gray-400">Experience</p>
 
                     <p className="text-sm font-medium mt-1">
                       {worker.experience}
@@ -454,9 +366,7 @@ export default function Workers() {
                   </div>
 
                   <div>
-                    <p className="text-xs text-gray-400">
-                      Location
-                    </p>
+                    <p className="text-xs text-gray-400">Location</p>
 
                     <p className="text-sm font-medium mt-1">
                       {worker.location}
@@ -464,9 +374,7 @@ export default function Workers() {
                   </div>
 
                   <div>
-                    <p className="text-xs text-gray-400">
-                      Rating
-                    </p>
+                    <p className="text-xs text-gray-400">Rating</p>
 
                     <div className="flex items-center gap-1 mt-1">
                       <Star
@@ -479,58 +387,39 @@ export default function Workers() {
                       </span>
                     </div>
                   </div>
-
                 </div>
 
                 <button
-                  onClick={() =>
-                    setSelectedWorker(worker)
-                  }
+                  onClick={() => setSelectedWorker(worker)}
                   className="w-full mt-4 h-10 rounded-xl bg-[#087F7A]/10 text-[#087F7A] text-sm font-semibold flex items-center justify-center gap-2"
                 >
                   <Eye size={17} />
                   Review Worker
                 </button>
-
               </div>
             ))}
-
           </div>
 
           {filteredWorkers.length === 0 && (
             <div className="py-14 text-center">
+              <Search size={28} className="mx-auto text-gray-300" />
 
-              <Search
-                size={28}
-                className="mx-auto text-gray-300"
-              />
-
-              <p className="font-medium mt-3">
-                No workers found
-              </p>
+              <p className="font-medium mt-3">No workers found</p>
 
               <p className="text-sm text-gray-400 mt-1">
                 Try changing your search or filter.
               </p>
-
             </div>
           )}
-
         </div>
-
       </main>
 
       {/* Review Modal */}
       {selectedWorker && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center px-4">
-
           <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-6">
-
             <div className="flex items-center justify-between">
-
-              <h2 className="text-lg font-bold">
-                Worker Verification
-              </h2>
+              <h2 className="text-lg font-bold">Worker Verification</h2>
 
               <button
                 onClick={() => setSelectedWorker(null)}
@@ -538,96 +427,63 @@ export default function Workers() {
               >
                 <X size={18} />
               </button>
-
             </div>
 
             {/* Worker */}
             <div className="flex items-center gap-4 mt-6">
-
               <div className="w-14 h-14 rounded-full bg-[#087F7A]/10 flex items-center justify-center">
-                <UserRound
-                  size={25}
-                  className="text-[#087F7A]"
-                />
+                <UserRound size={25} className="text-[#087F7A]" />
               </div>
 
               <div>
-                <h3 className="font-bold">
-                  {selectedWorker.name}
-                </h3>
+                <h3 className="font-bold">{selectedWorker.name}</h3>
 
                 <p className="text-sm text-gray-500 mt-1">
                   {selectedWorker.service}
                 </p>
 
                 <div className="flex items-center gap-1 mt-1">
-                  <Star
-                    size={14}
-                    className="text-[#FF5A00] fill-[#FF5A00]"
-                  />
+                  <Star size={14} className="text-[#FF5A00] fill-[#FF5A00]" />
 
                   <span className="text-xs font-medium">
                     {selectedWorker.rating}
                   </span>
                 </div>
               </div>
-
             </div>
 
             {/* Details */}
             <div className="mt-6 space-y-4">
+              <DetailRow label="Worker ID" value={selectedWorker.id} />
 
-              <DetailRow
-                label="Worker ID"
-                value={selectedWorker.id}
-              />
+              <DetailRow label="Experience" value={selectedWorker.experience} />
 
-              <DetailRow
-                label="Experience"
-                value={selectedWorker.experience}
-              />
-
-              <DetailRow
-                label="Location"
-                value={selectedWorker.location}
-              />
+              <DetailRow label="Location" value={selectedWorker.location} />
 
               <DetailRow
                 label="Reviews"
                 value={String(selectedWorker.reviews)}
               />
 
-              <DetailRow
-                label="Current Status"
-                value={selectedWorker.status}
-              />
-
+              <DetailRow label="Current Status" value={selectedWorker.status} />
             </div>
 
             {/* Verification Documents */}
             <div className="mt-6 p-4 rounded-2xl bg-gray-50">
-
               <div className="flex items-center gap-2">
-                <ShieldCheck
-                  size={18}
-                  className="text-[#087F7A]"
-                />
+                <ShieldCheck size={18} className="text-[#087F7A]" />
 
-                <p className="text-sm font-semibold">
-                  Verification Documents
-                </p>
+                <p className="text-sm font-semibold">Verification Documents</p>
               </div>
 
               <p className="text-xs text-gray-500 mt-2">
-                Identity, skill and worker verification
-                documents can be reviewed here.
+                Identity, skill and worker verification documents can be
+                reviewed here.
               </p>
-
             </div>
 
             {/* Actions */}
             <div className="grid grid-cols-2 gap-3 mt-6">
-
               <button
                 onClick={() => setSelectedWorker(null)}
                 className="h-11 rounded-xl bg-green-600 text-white font-semibold flex items-center justify-center gap-2"
@@ -643,11 +499,8 @@ export default function Workers() {
                 <XCircle size={18} />
                 Reject
               </button>
-
             </div>
-
           </div>
-
         </div>
       )}
 
@@ -656,16 +509,11 @@ export default function Workers() {
           © 2026 ShramiGo · Connecting people. Empowering work.
         </p>
       </footer>
-
     </div>
   );
 }
 
-function StatusBadge({
-  status,
-}: {
-  status: WorkerStatus;
-}) {
+function StatusBadge({ status }: { status: WorkerStatus }) {
   const styles = {
     Verified: "bg-green-50 text-green-700",
     Pending: "bg-orange-50 text-orange-700",
@@ -681,22 +529,12 @@ function StatusBadge({
   );
 }
 
-function DetailRow({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
+function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <span className="text-xs text-gray-400">
-        {label}
-      </span>
+      <span className="text-xs text-gray-400">{label}</span>
 
-      <span className="text-sm font-medium text-right">
-        {value}
-      </span>
+      <span className="text-sm font-medium text-right">{value}</span>
     </div>
   );
 }
