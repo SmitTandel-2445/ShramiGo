@@ -1,0 +1,14 @@
+{
+  "name": "shramigo-monorepo",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter shramigo-frontend dev",
+    "dev:frontend": "pnpm --filter shramigo-frontend dev",
+    "build:frontend": "pnpm --filter shramigo-frontend build",
+    "typecheck": "pnpm --filter shramigo-frontend typecheck",
+    "typecheck:contracts": "pnpm --filter @shramigo/contracts typecheck"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
