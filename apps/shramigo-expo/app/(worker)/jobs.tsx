@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import { COLORS } from '@/lib/appConstants';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -125,6 +126,7 @@ export default function WorkerJobsScreen() {
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: bg }]}>
+      <StatusBar style={isDark ? 'light' : 'dark'} />
       {/* Header */}
       <View style={styles.header}>
         <View>

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import { BrandLogo } from '@/components/BrandLogo';
 import { COLORS } from '@/lib/appConstants';
 
@@ -10,7 +11,9 @@ export default function WelcomeScreen() {
   const router = useRouter();
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
+      <StatusBar style="light" />
+      <SafeAreaView edges={['top']} style={{ backgroundColor: COLORS.primary }} />
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Hero */}
         <View style={styles.hero}>
@@ -73,7 +76,7 @@ export default function WelcomeScreen() {
           <Text style={styles.ctaHint}>Choose your role to continue</Text>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

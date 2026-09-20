@@ -6,6 +6,7 @@ import {
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import { COLORS } from '@/lib/appConstants';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -116,7 +117,9 @@ export default function WorkerDashboard() {
   const totalEarnings = bookings.filter(b => b.status.toLowerCase() === 'completed').reduce((sum, b) => sum + (b.worker_payout || 0), 0);
 
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor: bg }]}>
+    <View style={[styles.safeArea, { backgroundColor: bg }]}>
+      <StatusBar style="light" />
+      <SafeAreaView edges={['top']} style={{ backgroundColor: COLORS.primary }} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
@@ -487,7 +490,7 @@ export default function WorkerDashboard() {
           </View>
         </View>
       </Modal>
-    </SafeAreaView>
+    </View>
   );
 }
 

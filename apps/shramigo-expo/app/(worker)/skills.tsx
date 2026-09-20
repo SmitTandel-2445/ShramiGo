@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '@/lib/appConstants';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -103,6 +104,7 @@ export default function WorkerSkillsScreen() {
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: bg }]}>
+      <StatusBar style={isDark ? 'light' : 'dark'} />
       {/* Top Bar with Back Button */}
       <View style={styles.topBar}>
         <TouchableOpacity
