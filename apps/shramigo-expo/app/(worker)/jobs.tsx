@@ -218,7 +218,7 @@ export default function WorkerJobsScreen() {
           <Text style={[styles.loadingText, { color: subTextColor }]}>{t('Loading your jobs...')}</Text>
         </View>
       ) : (
-        <ScrollView
+        <FlatList
           contentContainerStyle={styles.listContainer}
           showsVerticalScrollIndicator={false}
           refreshControl={
@@ -228,8 +228,9 @@ export default function WorkerJobsScreen() {
               tintColor={COLORS.primary}
             />
           }
-        >
-          {filtered.length === 0 ? (
+          data={filtered}
+          keyExtractor={(b) => String(b.id)}
+          ListEmptyComponent={
             <View style={[styles.emptyCard, { backgroundColor: cardBg, borderColor: cardBorder }]}>
               <View style={styles.emptyIconCircle}>
                 <Ionicons name="briefcase-outline" size={38} color={subTextColor} />
@@ -243,8 +244,8 @@ export default function WorkerJobsScreen() {
                   : t('Make sure your availability is turned ON to receive bookings.')}
               </Text>
             </View>
-          ) : (
-            filtered.map(b => {
+          }
+          renderItem={({ item: b }) => {
               const style = getStatusStyle(b.status);
               const isPending = b.status.toLowerCase() === 'pending';
               const isAccepted = ['accepted', 'confirmed'].includes(b.status.toLowerCase());
@@ -254,7 +255,6 @@ export default function WorkerJobsScreen() {
 
               return (
                 <View
-                  key={b.id}
                   style={[styles.jobCard, { backgroundColor: cardBg, borderColor: cardBorder }]}
                 >
                   {/* Top Bar */}
@@ -385,9 +385,8 @@ export default function WorkerJobsScreen() {
                   </View>
                 </View>
               );
-            })
-          )}
-        </ScrollView>
+          }}
+        />
       )}
 
       {/* Job Details Modal */}

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  TextInput, ActivityIndicator, Image, RefreshControl, Modal, Alert,
+  TextInput, ActivityIndicator, RefreshControl, Modal, Alert, FlatList,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -254,7 +255,7 @@ export default function SearchScreen() {
           <Text style={[styles.loadingText, { color: subTextColor }]}>Finding skilled workers...</Text>
         </View>
       ) : (
-        <ScrollView
+        <FlatList
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
           refreshControl={
@@ -264,8 +265,9 @@ export default function SearchScreen() {
               tintColor={COLORS.primary}
             />
           }
-        >
-          {filteredWorkers.length === 0 ? (
+          data={filteredWorkers}
+          keyExtractor={(worker, index) => `${worker.id}-${worker.service}-${index}`}
+          ListEmptyComponent={
             <View style={[styles.emptyState, { backgroundColor: cardBg, borderColor: cardBorder }]}>
               <Ionicons name="search-outline" size={48} color={subTextColor} />
               <Text style={[styles.emptyTitle, { color: textColor }]}>No workers found</Text>
@@ -273,10 +275,9 @@ export default function SearchScreen() {
                 Try adjusting your search query or selecting a different service category.
               </Text>
             </View>
-          ) : (
-            filteredWorkers.map((worker, index) => (
+          }
+          renderItem={({ item: worker }) => (
               <View
-                key={`${worker.id}-${worker.service}-${index}`}
                 style={[styles.workerCard, { backgroundColor: cardBg, borderColor: cardBorder }]}
               >
                 <View style={styles.workerLeft}>
@@ -331,9 +332,8 @@ export default function SearchScreen() {
                   </TouchableOpacity>
                 </View>
               </View>
-            ))
           )}
-        </ScrollView>
+        />
       )}
 
       {/* Booking Sheet Modal */}
