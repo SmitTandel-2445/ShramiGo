@@ -85,7 +85,7 @@ export default function BookingsScreen() {
           ) : filtered.map(booking => {
             const sc = getStatusColor(booking.status);
             return (
-              <TouchableOpacity key={booking.id} style={[styles.bookingCard, { backgroundColor: cardBg }]} onPress={() => router.push(`/(customer)/bookings/${booking.id}`)} activeOpacity={0.85}>
+              <TouchableOpacity key={booking.id} style={[styles.bookingCard, { backgroundColor: cardBg }]} onPress={() => router.push(`/(customer)/bookings/${booking.id}` as any)} activeOpacity={0.85}>
                 <View style={styles.bookingTop}>
                   <View style={styles.bookingIdRow}>
                     <Text style={[styles.bookingId, { color: subTextColor }]}>Booking #{booking.id}</Text>

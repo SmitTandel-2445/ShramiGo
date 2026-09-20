@@ -122,7 +122,7 @@ export default function CustomerHomeScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={[styles.sectionTitle, { color: textColor }]}>{t('Popular Services')}</Text>
-            <TouchableOpacity onPress={() => router.push('/(customer)/services')}>
+            <TouchableOpacity onPress={() => router.push('/(customer)/search')}>
               <Text style={styles.seeAll}>{t('See all')}</Text>
             </TouchableOpacity>
           </View>
@@ -161,7 +161,7 @@ export default function CustomerHomeScreen() {
           ) : (
             <View style={styles.workersList}>
               {filteredWorkers.slice(0, 6).map((worker) => (
-                <WorkerCard key={worker.id} worker={worker} cardBg={cardBg} textColor={textColor} subTextColor={subTextColor} onPress={() => router.push(`/(customer)/workers/${worker.id}`)} t={t} />
+                <WorkerCard key={worker.id} worker={worker} cardBg={cardBg} textColor={textColor} subTextColor={subTextColor} onPress={() => router.push(`/(customer)/workers/${worker.id}` as any)} t={t} />
               ))}
             </View>
           )}

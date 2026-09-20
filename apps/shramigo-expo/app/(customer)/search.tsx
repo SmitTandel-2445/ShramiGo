@@ -105,7 +105,7 @@ export default function SearchScreen() {
               <Text style={[styles.emptyDesc, { color: subTextColor }]}>Try a different service or location</Text>
             </View>
           ) : filteredWorkers.map(worker => (
-            <TouchableOpacity key={worker.id} style={[styles.workerCard, { backgroundColor: cardBg }]} onPress={() => router.push(`/(customer)/workers/${worker.id}`)} activeOpacity={0.85}>
+            <TouchableOpacity key={worker.id} style={[styles.workerCard, { backgroundColor: cardBg }]} onPress={() => router.push(`/(customer)/workers/${worker.id}` as any)} activeOpacity={0.85}>
               <View style={styles.workerLeft}>
                 {worker.image ? (
                   <Image source={{ uri: worker.image }} style={styles.avatar} />

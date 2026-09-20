@@ -1,15 +1,39 @@
 import { storage, KEYS } from './storage';
+import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 
-const rawConfiguredUrl = (process.env.EXPO_PUBLIC_API_BASE_URL as string | undefined)?.replace(/\/$/, '');
-
-const getApiBaseUrl = (): string => {
-  if (rawConfiguredUrl) {
-    return rawConfiguredUrl;
+export const getApiBaseUrl = (): string => {
+  const configured = (process.env.EXPO_PUBLIC_API_BASE_URL as string | undefined)?.trim()?.replace(/\/$/, '');
+  
+  // If EXPO_PUBLIC_API_BASE_URL is explicitly set to a non-loopback address (e.g. remote or LAN IP), use it
+  if (configured && !configured.includes('localhost') && !configured.includes('127.0.0.1')) {
+    return configured;
   }
+
+  // In Expo Go or development client, detect Metro host IP from debugger host (e.g. 192.168.x.x)
+  const hostUri =
+    Constants.expoConfig?.hostUri ||
+    (Constants as any).manifest2?.extra?.expoGo?.debuggerHost ||
+    (Constants as any).manifest?.debuggerHost;
+
+  if (hostUri) {
+    const host = hostUri.split(':')[0];
+    if (host) {
+      return `http://${host}:8000`;
+    }
+  }
+
+  if (configured) {
+    return configured;
+  }
+
+  // Android emulator loopback alias
+  if (Platform.OS === 'android') {
+    return 'http://10.0.2.2:8000';
+  }
+
   return 'http://localhost:8000';
 };
-
-const API_BASE_URL = getApiBaseUrl();
 
 function formatApiError(data: unknown): string {
   if (!data || typeof data !== 'object') {
@@ -66,9 +90,10 @@ export async function apiRequest<T>(
     headers.set('Authorization', `Bearer ${token}`);
   }
 
+  const baseUrl = getApiBaseUrl();
   let response: Response;
   try {
-    response = await fetch(`${API_BASE_URL}${endpoint}`, { ...options, headers });
+    response = await fetch(`${baseUrl}${endpoint}`, { ...options, headers });
   } catch {
     throw new ApiError('Unable to reach the server. Please check your connection.', 0, null);
   }

@@ -61,12 +61,12 @@ apps/shramigo-expo/
    npm install --legacy-peer-deps
    ```
 
-3. Configure Environment:
-   Create a `.env` file from `.env.example`:
+3. Configure Environment (Optional):
+   Create a `.env` file if you wish to override automatic API endpoint detection:
    ```env
-   EXPO_PUBLIC_API_URL=http://localhost:8000/api/v1
+   EXPO_PUBLIC_API_BASE_URL=http://localhost:8000
    ```
-   > **Note for Physical Devices (Expo Go)**: Replace `localhost` with your machine's local network IP address (e.g., `http://192.168.1.100:8000/api/v1`).
+   > **Physical Devices (Expo Go)**: The app automatically detects your computer's LAN IP address from the Metro bundler connection. No manual IP setup is needed as long as your backend is running with `--host 0.0.0.0`.
 
 ---
 

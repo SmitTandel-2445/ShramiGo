@@ -72,7 +72,15 @@ ShramiGo/
 
 ### Running Locally
 
-**Start the Frontend Web Development Server:**
+**1. Start the Backend Server:**
+```bash
+cd apps/backend
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+> **Important for Mobile & LAN Testing:** Using `--host 0.0.0.0` ensures the backend accepts incoming connections from physical mobile devices connected to your local WiFi network (Expo Go). If run with default `127.0.0.1`, mobile devices will fail to reach the server.
+> Interactive OpenAPI documentation is available at `http://localhost:8000/docs`.
+
+**2. Start the Frontend Web Development Server:**
 ```bash
 # From root
 pnpm dev
@@ -83,34 +91,33 @@ pnpm dev
 ```
 The web frontend will start at `http://localhost:5173`.
 
-**Start the Expo Mobile Development Server:**
+**3. Start the Expo Mobile Development Server:**
 ```bash
 cd apps/shramigo-expo
 npm start
 ```
-- Press `a` for Android emulator, `i` for iOS simulator, or `w` for web preview.
 - Scan the QR code with the **Expo Go** app on your physical iOS/Android phone to run natively.
+  *(The mobile app automatically detects your computer's LAN IP address from Metro bundler, so no manual IP configuration is required when running over WiFi).*
+- Press `a` for Android emulator, `i` for iOS simulator, or `w` for web preview.
 
-**Start the Backend Server:**
+### 🔑 Local Seed & Default User Accounts
+
+To seed a complete demo database with pre-configured customer, worker, and admin accounts:
+
 ```bash
 cd apps/backend
-uvicorn app.main:app --reload
+python seed_demo.py --reset
 ```
 
-The backend API will start at `http://localhost:8000`. Interactive OpenAPI documentation is available at `http://localhost:8000/docs`.
+> **Demo Accounts (Password: `customer123`):**
+> - **Admin**: `admin@shramigo.com`
+> - **Customer**: `customer@shramigo.com`
+> - **Worker**: `worker@shramigo.com`
 
-### 🔑 Local Seed & Default Admin Setup
-
-To set up or seed a default administrative user for local development and testing:
-
+Alternatively, to create a custom admin user:
 ```bash
-cd apps/backend
 python create_admin.py --email joan@gmail.com --password joan123 --name "Joan Admin" --phone 9876500000
 ```
-
-> **Default Seed Credentials (Local Development):**
-> - **Admin Portal / API**: `joan@gmail.com` / `joan123` (generated via `create_admin.py`)
-> - **Customer / Worker Portals**: New user accounts can be created locally via the registration flow or seeding scripts.
 
 
 ## 🏗️ Architecture: Frontend & Mobile
