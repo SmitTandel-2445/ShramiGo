@@ -46,8 +46,9 @@ def _local_now() -> datetime:
 
 # Valid status transitions for workers
 WORKER_ALLOWED_TRANSITIONS = {
-    "pending": ["accepted", "cancelled"],
+    "pending": ["accepted", "confirmed", "cancelled"],
     "accepted": ["on_the_way", "in_progress", "cancelled"],
+    "confirmed": ["on_the_way", "in_progress", "cancelled"],
     "on_the_way": ["in_progress"],
     "in_progress": ["completed"],
 }
@@ -504,6 +505,7 @@ def update_booking_status(
 
     status_messages = {
         "accepted": "Your booking has been accepted by the worker.",
+        "confirmed": "Your booking has been confirmed.",
         "on_the_way": "Your worker is on the way to your location.",
         "in_progress": "Your service has started.",
         "completed": (
@@ -820,13 +822,13 @@ def cancel_booking(
             detail="You can only cancel your own bookings",
         )
 
-    if booking.status not in ["pending", "accepted"]:
+    if booking.status not in ["pending", "accepted", "confirmed"]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=(
                 f"Cannot cancel booking in "
                 f"'{booking.status}' status. "
-                "Only pending or accepted bookings can be cancelled."
+                "Only pending, accepted, or confirmed bookings can be cancelled."
             ),
         )
 
