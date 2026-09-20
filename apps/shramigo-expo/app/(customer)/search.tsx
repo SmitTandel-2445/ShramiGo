@@ -104,8 +104,8 @@ export default function SearchScreen() {
               <Text style={[styles.emptyTitle, { color: textColor }]}>No workers found</Text>
               <Text style={[styles.emptyDesc, { color: subTextColor }]}>Try a different service or location</Text>
             </View>
-          ) : filteredWorkers.map(worker => (
-            <TouchableOpacity key={worker.id} style={[styles.workerCard, { backgroundColor: cardBg }]} onPress={() => router.push(`/(customer)/workers/${worker.id}` as any)} activeOpacity={0.85}>
+          ) : filteredWorkers.map((worker, index) => (
+            <TouchableOpacity key={`${worker.id}-${worker.service}-${index}`} style={[styles.workerCard, { backgroundColor: cardBg }]} onPress={() => router.push(`/(customer)/workers/${worker.id}` as any)} activeOpacity={0.85}>
               <View style={styles.workerLeft}>
                 {worker.image ? (
                   <Image source={{ uri: worker.image }} style={styles.avatar} />

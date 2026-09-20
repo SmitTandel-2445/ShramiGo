@@ -53,7 +53,9 @@ Backend scaffold and API services for the ShramiGo Cooperative Gig Services Plat
 
 ---
 
-## Database Setup & Migrations
+## Database Setup, Migrations & Seeding
+
+### 1. Database Migrations
 
 Run database migrations to initialize or update the database schema:
 
@@ -61,23 +63,64 @@ Run database migrations to initialize or update the database schema:
 alembic upgrade head
 ```
 
-_(Optional)_ Create an initial admin user:
+_(Optional)_ Create an initial standalone admin user:
 
 ```bash
-python create_admin.py
+python create_admin.py --email admin@shramigo.com --password admin123 --name "Platform Admin" --phone 9876500001
 ```
 
-For a clean local demo database with customer, worker, and admin accounts plus sample bookings:
+---
+
+### 2. Large-Scale Realistic Database Seeding (`seed_demo.py`)
+
+The repository includes a high-performance, batched SQLAlchemy ORM seeding generator that populates hundreds of randomized, production-realistic records with full relational integrity.
+
+#### Quick Start
+
+To reset and seed the default dataset (~100 users, 250 bookings, 150+ reviews, payments, notifications):
 
 ```bash
 python seed_demo.py --reset
 ```
 
-The demo accounts use `customer123` as the password:
+#### Custom Scale Seeding
 
-- `customer@shramigo.com`
-- `worker@shramigo.com`
-- `admin@shramigo.com`
+You can customize the volume of generated entities via CLI parameters:
+
+```bash
+# Seed 100 customers, 100 workers, and 500 bookings
+python seed_demo.py --reset --customers 100 --workers 100 --bookings 500
+```
+
+#### CLI Parameters
+
+| Flag | Type | Default | Description |
+|---|---|---|---|
+| `--reset` | Boolean flag | `False` | Clears all existing application records before seeding. |
+| `--customers` | Integer | `50` | Number of customer accounts and profiles to generate. |
+| `--workers` | Integer | `50` | Number of trade worker accounts, profiles, skills, and availability schedules to generate. |
+| `--bookings` | Integer | `250` | Number of bookings across all statuses (`completed`, `confirmed`, `in_progress`, `pending`, `cancelled`). |
+
+#### ORM Architecture & Seeding Highlights
+
+- **Batched SQLAlchemy Flushes**: Uses staged multi-entity flushes (`db.flush()`) to minimize network round-trips to remote databases (e.g. Supabase PostgreSQL), generating hundreds of records in seconds.
+- **Relational Integrity**: Generates full cascading relationships from `User` -> `CustomerProfile` / `WorkerProfile` -> `WorkerService` -> `WorkerSkill` -> `WorkerAvailability` -> `Booking` -> `Payment` & `Review` -> `Notification`.
+- **Realistic Data Distribution**:
+  - **11 Trade Services**: Electrical, Plumbing, Cleaning, Deep Cleaning, Sofa Cleaning, Carpentry, Painting, AC Repair, Appliance Repair, Driver, and Masonry.
+  - **Geo-Coordinates & Addresses**: Real street addresses and GPS coordinates mapped across Indian metropolitan hubs (Pune, Mumbai, Bengaluru, Delhi, Ahmedabad).
+  - **Authentic Reviews & Ratings**: Realistic 3–5 star distribution with natural feedback comments, allowing realistic calculation of worker average ratings and review counts.
+  - **Payment Histories**: Matched Razorpay transaction IDs and Cash receipts with timestamps.
+
+#### Default Demo Login Credentials
+
+| Role | Email | Password | Details |
+|---|---|---|---|
+| **Customer** | `customer@shramigo.com` | `customer123` | Demo customer with Pune address & active bookings |
+| **Worker** | `worker@shramigo.com` | `worker123` | Master Electrician & AC technician with 4.9 rating |
+| **Admin** | `admin@shramigo.com` | `admin123` | Platform Administrator |
+| **Support** | `support@shramigo.com` | `admin123` | Support Lead |
+
+*(All generated bulk customer and worker accounts also use `customer123` and `worker123` respectively).*
 
 ---
 

@@ -73,6 +73,13 @@ SERVICES = [
         "base_price": 399,
         "icon": "Car",
     },
+    {
+        "name": "Masonry Work",
+        "category": "Masonry",
+        "description": "Tile setting, wall plaster, brickwork and civil repair services.",
+        "base_price": 499,
+        "icon": "Hammer",
+    },
 ]
 
 

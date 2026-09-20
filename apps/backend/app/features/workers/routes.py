@@ -190,8 +190,12 @@ def discover_workers(
     ).all()
 
     workers = []
+    seen: set[int] = set()
 
     for user, profile, worker_service, service_obj in results:
+        if user.id in seen:
+            continue
+        seen.add(user.id)
 
         availability = (
             db.query(WorkerAvailability)

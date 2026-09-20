@@ -100,23 +100,31 @@ npm start
   *(The mobile app automatically detects your computer's LAN IP address from Metro bundler, so no manual IP configuration is required when running over WiFi).*
 - Press `a` for Android emulator, `i` for iOS simulator, or `w` for web preview.
 
-### 🔑 Local Seed & Default User Accounts
+### 🔑 Large-Scale Database Seeding & Demo Accounts
 
-To seed a complete demo database with pre-configured customer, worker, and admin accounts:
+To seed a complete, production-realistic dataset (~100 users, 250 bookings, 150+ reviews, payments, notifications):
 
 ```bash
 cd apps/backend
 python seed_demo.py --reset
 ```
 
-> **Demo Accounts (Password: `customer123`):**
-> - **Admin**: `admin@shramigo.com`
-> - **Customer**: `customer@shramigo.com`
-> - **Worker**: `worker@shramigo.com`
+> **Custom Scaled Seeding:**
+> You can generate arbitrary numbers of records by passing flags:
+> ```bash
+> python seed_demo.py --reset --customers 100 --workers 100 --bookings 500
+> ```
 
-Alternatively, to create a custom admin user:
+> **Default Demo Login Accounts:**
+> - **Customer**: `customer@shramigo.com` (password: `customer123`)
+> - **Worker**: `worker@shramigo.com` (password: `worker123`)
+> - **Admin**: `admin@shramigo.com` (password: `admin123`)
+> - **Support**: `support@shramigo.com` (password: `admin123`)
+> *(All bulk-generated customer and worker accounts also share `customer123` and `worker123` passwords).*
+
+Alternatively, to create a custom standalone admin user:
 ```bash
-python create_admin.py --email joan@gmail.com --password joan123 --name "Joan Admin" --phone 9876500000
+python create_admin.py --email admin@shramigo.com --password admin123 --name "Platform Admin" --phone 9876500001
 ```
 
 

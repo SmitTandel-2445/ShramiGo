@@ -160,8 +160,8 @@ export default function CustomerHomeScreen() {
             </View>
           ) : (
             <View style={styles.workersList}>
-              {filteredWorkers.slice(0, 6).map((worker) => (
-                <WorkerCard key={worker.id} worker={worker} cardBg={cardBg} textColor={textColor} subTextColor={subTextColor} onPress={() => router.push(`/(customer)/workers/${worker.id}` as any)} t={t} />
+              {filteredWorkers.slice(0, 6).map((worker, index) => (
+                <WorkerCard key={`${worker.id}-${worker.service}-${index}`} worker={worker} cardBg={cardBg} textColor={textColor} subTextColor={subTextColor} onPress={() => router.push(`/(customer)/workers/${worker.id}` as any)} t={t} />
               ))}
             </View>
           )}

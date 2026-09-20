@@ -83,7 +83,7 @@ export default function AIMatchingScreen() {
             </View>
             <Text style={styles.resultsTitle}>Top Matches ({result.workers.length})</Text>
             {result.workers.map((w, i) => (
-              <TouchableOpacity key={w.id} style={styles.workerCard} onPress={() => router.push(`/(customer)/workers/${w.id}` as any)} activeOpacity={0.85}>
+              <TouchableOpacity key={`${w.id}-${i}`} style={styles.workerCard} onPress={() => router.push(`/(customer)/workers/${w.id}` as any)} activeOpacity={0.85}>
                 <View style={styles.matchRank}>
                   <Text style={styles.matchRankText}>{i + 1}</Text>
                 </View>
